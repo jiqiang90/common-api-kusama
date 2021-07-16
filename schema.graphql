@@ -271,7 +271,7 @@ type PayoutDetail @entity {
   id: ID! #era id + account id (can be both nom or vali)
   era: Era!
   account: Account!
-  # amount: BigInt!
+  amount: BigInt!
   isClaimed: Boolean!
   payout: ValidatorPayout!
 }

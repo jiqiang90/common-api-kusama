@@ -1,7 +1,7 @@
 ## Example queries for Kusama on the following use cases. 
 
 
-###Get historic transfers for a specific account
+### Get historic transfers for a specific account
 
 ```graphql
 query{
@@ -66,7 +66,6 @@ query{
 
 ### Get data for a graph off account balance changes over time
 
-
 ```graphql
 
 query{
@@ -83,15 +82,93 @@ query{
           }
           freeAmount,
           reservedAmount,
-          locked
+          locked,
+          timestamp
         }
       }
+  }
+}
+
+```
+
+Get historic slashes for a specific account
+### Get historic reward data for a specific account
+
+```graphql
+query{
+	events(filter:{
+    relatedAccounts:{
+      includes: "HRuaGanNmkmeQgZPWPXmkZJb944raNS5ni2vhKzhz75zVYP"  #filter account
+    },
+    module:{
+      equalTo: "staking"
+    },
+    event:{
+      equalTo: "Slash"
+    }
+  }){
+    nodes{
+      id,
+      parameters, #its payload
+      extrinsicId, #link to its extrinsic
+      timestamp
+    }
   }
 }
 
 
 ```
 
-Get historic slashes for a specific account
-Get historic reward data for a specific account
-Get payable staking rewards for specific Nominators
+### Get historic reward data for a specific account
+
+```graphql
+query{
+	events(filter:{
+    relatedAccounts:{
+      includes: "HRuaGanNmkmeQgZPWPXmkZJb944raNS5ni2vhKzhz75zVYP"  #filter account
+    },
+    module:{
+      equalTo: "staking"
+    },
+    event:{
+      equalTo: "Reward"
+    }
+  }){
+    nodes{
+      id,
+      parameters, #its payload
+      extrinsicId, #link to its extrinsic
+      timestamp
+    }
+  }
+}
+
+```
+
+
+### Get payable staking rewards for specific Nominators
+
+```graphql
+
+query{
+    payoutDetails(
+      filter:{
+        accountId:{
+          equalTo: "HRuaGanNmkmeQgZPWPXmkZJb944raNS5ni2vhKzhz75zVYP"
+        },
+        isClaimed:{
+          equalTo: false #if it haven't been claimed,it is payable
+        }
+      }){
+        nodes{
+          id,
+          eraId,
+          amount,
+          payout{
+            totalPayout 
+          }
+        }
+    }
+}
+
+```
